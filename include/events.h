@@ -14,9 +14,8 @@
 #include "eeprom.h"
 #include "gps.h"
 
-#define CNT_SAMPLE       5000
+#define CNT_SAMPLE       4000
 #define N_SAMPLE         10
-#define FR_SHOW          2000
 
 
 

@@ -38,14 +38,10 @@ void process_Events(){
         }
         if(cnt == CNT_SAMPLE){
             FlagReadyRed = true;
+            FlagShow = !FlagShow;
             cnt = 0;
             
         }
-        if (CntShow == FR_SHOW){
-            FlagShow = !FlagShow; 
-            CntShow = 0;
-        }
-        CntShow++;
         cnt++;
     }
 
@@ -65,12 +61,10 @@ void process_Events(){
     switch (key){
     case 'A':
         Clear();
-        returnHome();
         setCursor(1,1);
         WriteMessage("1.Seguimiento");
         setCursor(1,2);
         WriteMessage("2.Consulta");
-        returnHome();
         FlagMode1 = false;
         break;
     case '1':
@@ -107,7 +101,6 @@ void FormatPoint(){
     uint16_t AddrRead = 0x0004;
     myfloat longitud;
     myfloat latitud;
-    printf("%d",NS);
     printf("%s", "<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
     printf("%s", "<kml xmlns=\"http://www.opengis.net/kml/2.2\">");
     printf("%s", "<Document>");

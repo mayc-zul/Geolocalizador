@@ -25,7 +25,6 @@ extern bool uart_req;
 extern bool FlagReadyRed;
 extern uint8_t CntSample;
 extern bool FlagMode1;
-extern int CntShow;
 extern bool FlagShow;
 
 typedef union {
@@ -46,6 +45,8 @@ myfloat Float2IEEE(float var);
 myfloat IEEE2Float(uint32_t rep);
 uint8_t * GenericVector(myfloat rep);
 char *ProcessDate(char *ArrayDate);
+char* Signo(myfloat num, char *numstring);
+//char * UTMtoString(myfloat num);
 
 
 #endif

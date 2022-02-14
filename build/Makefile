@@ -56,10 +56,10 @@ RM = C:\RPPicoSDK\cmake\bin\cmake.exe -E rm -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = "C:\Users\Maycol\Documents\UdeA\Onceavo semestre\Embebidos\Laboratorio\LAB_3"
+CMAKE_SOURCE_DIR = "C:\Users\Maycol\Documents\UdeA\Onceavo semestre\Embebidos\Laboratorio\Geolocalizador"
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = "C:\Users\Maycol\Documents\UdeA\Onceavo semestre\Embebidos\Laboratorio\LAB_3\build"
+CMAKE_BINARY_DIR = "C:\Users\Maycol\Documents\UdeA\Onceavo semestre\Embebidos\Laboratorio\Geolocalizador\build"
 
 #=============================================================================
 # Targets provided globally by CMake.
@@ -86,9 +86,9 @@ rebuild_cache/fast: rebuild_cache
 
 # The main all target
 all: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start "C:\Users\Maycol\Documents\UdeA\Onceavo semestre\Embebidos\Laboratorio\LAB_3\build\CMakeFiles" "C:\Users\Maycol\Documents\UdeA\Onceavo semestre\Embebidos\Laboratorio\LAB_3\build\\CMakeFiles\progress.marks"
+	$(CMAKE_COMMAND) -E cmake_progress_start "C:\Users\Maycol\Documents\UdeA\Onceavo semestre\Embebidos\Laboratorio\Geolocalizador\build\CMakeFiles" "C:\Users\Maycol\Documents\UdeA\Onceavo semestre\Embebidos\Laboratorio\Geolocalizador\build\\CMakeFiles\progress.marks"
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\Makefile2 all
-	$(CMAKE_COMMAND) -E cmake_progress_start "C:\Users\Maycol\Documents\UdeA\Onceavo semestre\Embebidos\Laboratorio\LAB_3\build\CMakeFiles" 0
+	$(CMAKE_COMMAND) -E cmake_progress_start "C:\Users\Maycol\Documents\UdeA\Onceavo semestre\Embebidos\Laboratorio\Geolocalizador\build\CMakeFiles" 0
 .PHONY : all
 
 # The main clean target

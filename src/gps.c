@@ -16,7 +16,6 @@ bool FlagMode1 = false;
 bool FlagShow = true;
 uint16_t AddrWrite = 0x0004;
 uint8_t CntSample = 0;
-int CntShow = 0;
 uint8_t ArrayCnt[3] = {0x00, 0x00, 0};
 
 
@@ -49,7 +48,7 @@ void on_uart_rx(){
 }
 
 void LatLonGet(char ch){
-    
+    char NSampleCaracter[3];
     switch (state){
     case 0:
         if(ch == '$'){
@@ -147,28 +146,35 @@ void LatLonGet(char ch){
             AddrWrite = AddrWrite + 4;
             FlagReadyRed = false;
             CntSample++;
-            printf("%d\n", CntSample);
+            //printf("%d\n", CntSample);
             ArrayCnt[2] = CntSample;
             EEPROM_WriteByte(ArrayCnt, 3);
             //printf("Time: %s - Longitud: %f - %x   Latitud: %f - %x\n", ProcessDate(Date),LongIEEE.f, LongIEEE.raw, LatIEEE.f, LatIEEE.raw);
             if(FlagMode1){
-                //if (FlagShow){
+                if (FlagShow){
+                    Clear();
                     setCursor(1,1);
                     WriteMessage("Long:");
                     setCursor(6,1);
-                    WriteMessage(Long);
+                    WriteMessage(Signo(LongIEEE,Long));
                     setCursor(1,2);
                     WriteMessage("Lat:");
                     setCursor(5,2);
-                    WriteMessage(Lat);
-                // }else{
-                //     Clear();
-                //     returnHome();
-                //     setCursor(1,1);
-                //     WriteMessage("Time:");
-                //     setCursor(6,1);
-                //     WriteMessage(ProcessDate(Date));
-                // }
+                    WriteMessage(Signo(LatIEEE,Lat));
+                }else{
+                    Clear();
+                    setCursor(1,1);
+                    WriteMessage("Time:");
+                    setCursor(6,1);
+                    WriteMessage(ProcessDate(Date));
+                    setCursor(1,2);
+                    WriteMessage("Sample:");
+                    NSampleCaracter[0] = (CntSample / 10) + 48;
+                    NSampleCaracter[1] = (CntSample % 10) + 48;
+                    NSampleCaracter[2] = '\0';
+                    setCursor(8,2);
+                    WriteMessage(NSampleCaracter);
+                }
             }
         }else if(ch != ','){
             Lat[ptr] = ch;
@@ -249,3 +255,42 @@ char *ProcessDate(char *ArrayDate){
     BufferDate[8] = '\0';
     return BufferDate;
 }
+
+char* Signo(myfloat num, char *numstring){
+    static char BufferString[15];
+    if(num.raw.sign == 1){
+        BufferString[0] = '-';
+    }else{
+        BufferString[0] = ' ';
+    }
+    for (int i = 0; i < strlen(numstring); i++){
+        BufferString[i+1] = numstring[i];
+    }
+    return BufferString;
+
+    
+}
+
+// char * UTMtoString(myfloat num){
+//     static char BufferString[9];
+//     int Resultado;
+//     int Residuo;
+    
+//     Resultado = (int)b;
+//     BufferString[0] = (Resultado / 10) + 48;
+//     BufferString[1] = (Resultado % 10) + 48;
+//     BufferString[2] = ',';
+//     Residuo = Resultado % 1;
+//     Resultado = (Residuo * 60);
+//     BufferString[3] = (Resultado / 10) + 48;
+//     BufferString[4] = (Resultado % 10) + 48;
+//     BufferString[5] = '.';
+//     Residuo = Resultado % 1;
+//     Resultado = (Residuo * 60);
+//     BufferString[6] = (Resultado / 10) + 48;
+//     BufferString[7] = (Resultado % 10) + 48;
+//     BufferString[8] = '\'';
+    
+//     return BufferString;
+    
+// }

@@ -109,7 +109,11 @@ void LCDInit(){
 
 // Función para limpiar el LCD
 void Clear (){
-    CmdWrite8(LCD_CLEARDISPLAY);
+    //CmdWrite8(LCD_CLEARDISPLAY);
+    setCursor(1,1);
+    WriteMessage("                ");
+    setCursor(1,2);
+    WriteMessage("                ");
 }
 // Función activar el cursor
 void cursorOn(){
