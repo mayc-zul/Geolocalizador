@@ -2,17 +2,16 @@
 #include <string.h>
 
 
+//Inicialización módulo I2C (Puertos SDA,SCL, ID I2C y baudios)
 void i2cInit(void){
-    i2c_init(I2C_ID, 100 * 1000);          // Parameter 1 Either i2c0 or i2c1, Parameter 2 Baudrate
-    gpio_set_function(PICO_I2C_SDA_PIN, GPIO_FUNC_I2C);             // Se escoge como funcionalidad del gpio el i2c con le pin para SDA
-    gpio_set_function(PICO_I2C_SCL_PIN, GPIO_FUNC_I2C);             // Se escoge como funcionalidad del gpio el i2c con le pin para SCL
+    i2c_init(I2C_ID, 100 * 1000);
+    gpio_set_function(PICO_I2C_SDA_PIN, GPIO_FUNC_I2C);
+    gpio_set_function(PICO_I2C_SCL_PIN, GPIO_FUNC_I2C);
     gpio_pull_up(PICO_I2C_SDA_PIN);
     gpio_pull_up(PICO_I2C_SCL_PIN);
-    // Make the I2C pins available to picotool
-    //bi_decl(bi_2pins_with_func(PICO_I2C_SDA_PIN, PICO_I2C_SCL_PIN, GPIO_FUNC_I2C)); 
 }
 
-/* description: This function is used to write the data at specified EEPROM_address..*/
+//Metodo usado para transmitir cierta cantidad de bytes usando el protocolo I2C, a la memoria EEPROM
 void EEPROM_WriteByte(uint8_t *var_eepromData, int TamData){
 
     if(i2c_write_blocking(I2C_ID, COMMAN_CTR, var_eepromData, TamData, false) == PICO_ERROR_GENERIC){
@@ -23,6 +22,7 @@ void EEPROM_WriteByte(uint8_t *var_eepromData, int TamData){
     
 }
 
+//Método usado para leer y retornar un dato de 1 byte de la memoria EEPROM
 uint8_t EEPROM_ReadByte(uint16_t var_eepromData){
     uint8_t buffer[2] = {0, 0};
     uint8_t HightByte = var_eepromData >> 8;
@@ -43,7 +43,7 @@ uint8_t EEPROM_ReadByte(uint16_t var_eepromData){
     
 }
 
-/* description: This function is used to read the data from specified EEPROM_address.        */
+//Método usado para leer y retornar N datos de 1 byte de la memoria EEPROM
 uint8_t *EEPROM_ReadNByte(uint8_t var_eepromData, int TamData){
     uint8_t buffer[2] = {0, 0};
     uint8_t HightByte = var_eepromData >> 8;
@@ -65,7 +65,7 @@ uint8_t *EEPROM_ReadNByte(uint8_t var_eepromData, int TamData){
 }
 
 
-
+//Método usado para escribir N datos en la memoria EEPROM, usando un apuntador para dicha escritura.
 void EEPROM_WriteNBytes(uint16_t StartPonter, uint8_t *array){
     
     uint8_t buffer[3] = {0, 0, 0};
@@ -83,21 +83,4 @@ void EEPROM_WriteNBytes(uint16_t StartPonter, uint8_t *array){
     }
 }
 
-// void EEPROM_ReadNBytes(uint16_t StartPonter, uint8_t *array){
-//     uint8_t buffer[3] = {0, 0, 0};
-//     int8_t Data = 0x00;
-//     uint8_t HightByte = StartPonter >> 8;
-//     uint8_t LowByte = StartPonter & 0x00FF;
-
-//     for (int i = 0; i < strlen(array); i++){
-//         HightByte = StartPonter >> 8;
-//         LowByte = StartPonter & 0x00FF;
-//         buffer[0] = HightByte;
-//         buffer[1] = LowByte;
-//         Data = EEPROM_ReadByte(buffer);
-//         printf("%c", Data);
-//         StartPonter ++;
-//     }
-//     printf("\n");
-// }
 

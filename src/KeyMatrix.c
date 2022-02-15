@@ -20,7 +20,6 @@ char keys[4][4] = {
   { '*','0','#', 'D' }
 };
 
-//char value = '1';
 volatile bool gpio_req = false;                     // Bandera para indicar la activación del la interrupción del GPIO
 volatile uint gpioRead;                             // Varibale para identificar el puerto GPIO correspondiente a la interrupción
 
@@ -40,7 +39,6 @@ void keyMatrixInit(void) {
         gpio_init(col[i]);                                                                      // Difinición de los puertos
         gpio_set_dir(col[i], GPIO_IN);                                                          // Configuración las columnas como entradas
         gpio_pull_up(col[i]);                                                                   // Configuración entradas en pull up (columnas)
-        //gpio_put(col[i], 1);
         gpio_set_irq_enabled_with_callback(col[i], GPIO_IRQ_EDGE_FALL, true, gpio_callback);    // Habilitar interrupción con callback cuando ocurra una flanco de bajada
         
         //---- Row --------
@@ -54,9 +52,7 @@ void ChangePort(void){
     for (int i = 0; i < 4; i++){
         gpio_set_irq_enabled_with_callback(col[i], GPIO_IRQ_EDGE_FALL, false, gpio_callback);
         gpio_set_dir(row[i], GPIO_IN);
-        gpio_pull_up(row[i]);
-        //gpio_put(row[i], 1);
-        
+        gpio_pull_up(row[i]);        
         gpio_set_dir(col[i], GPIO_OUT);
         gpio_put(col[i], 0);
     }
@@ -84,6 +80,5 @@ char keyMatrixRead(void){
         } 
         return keys[iRow][iCol];
     }  
-    
     return '.';
 }

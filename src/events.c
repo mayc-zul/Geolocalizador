@@ -9,15 +9,13 @@ bool FlagGet = true;
 uint32_t Hex;
 
 
+// Inicialización de los módulos (Timer, LCD, I2C, UART), GPIO's de entrada/salida usados y menú del aplicativo
 void EventAllInit(){
-    // Inicializar las funciones de entrada/salida estándar
     stdio_init_all();
-    // Inicialización del modulo rtc, KeyMatrix y LCD
     keyMatrixInit();
     LCDInit();
     i2cInit();
     uartInit();
-    // Inicialización del Timer
     TimerInit(CNT_SPLITREAD);
     setCursor(1,1);
     WriteMessage("1.Seguimiento");
@@ -26,25 +24,24 @@ void EventAllInit(){
     
 }
 
+//Procesamiento de eventos/interrupciones producidas por módulos y procesamiento de la interfaz de usuario LCD.
 void process_Events(){
-    // Se detecta la tecla oprimida
     key = keyMatrixRead();
     
-
     if(timer_req){
         timer_req = false;
-        if (ProcesarTecla == true){                         // Se identifica si una tecla fue presionada
-            cnt_ProcessKey++;                              // Activa el debounce
+        if (ProcesarTecla == true){                         
+            cnt_ProcessKey++;                              
         }
         if(cnt == CNT_SAMPLE){
             FlagReadyRed = true;
             FlagShow = !FlagShow;
             cnt = 0;
-            
         }
         cnt++;
     }
 
+    //Polling asociado a la interupción por dato recibido donde se inactiva la bandera de interrupción y se procesa el caracter que captura, .
     if(uart_req){
         uart_req = false;
         if(FlagReadyRed &&  CntSample <= N_SAMPLE){
@@ -57,46 +54,32 @@ void process_Events(){
         keyMatrixInit();
     }
 
-
+    //Impresión del menú en el LCD y decisión en caso de oprimirse alguna opción del menú.
     switch (key){
-    case 'A':
-        Clear();
-        setCursor(1,1);
-        WriteMessage("1.Seguimiento");
-        setCursor(1,2);
-        WriteMessage("2.Consulta");
-        FlagMode1 = false;
-        break;
-    case '1':
-        FlagMode1 = true;
-        break;
-    case '2':
-        FormatPoint();
-        break;
-    case '3':
-        CntSample = 0;
-    default:
-        break;
+        case 'A':
+            Clear();
+            setCursor(1,1);
+            WriteMessage("1.Seguimiento");
+            setCursor(1,2);
+            WriteMessage("2.Consulta");
+            FlagMode1 = false;
+            break;
+        case '1':
+            FlagMode1 = true;
+            break;
+        case '2':
+            FormatPoint();
+            break;
+        case '3':
+            CntSample = 0;
+        default:
+            break;
     }
-    // if(CntSample == N_SAMPLE && FlagGet){
-
-    //     for (int i = 0; i < N_SAMPLE*2; i++){
-    //         DataRead = EEPROM_ReadByte(AddrRead, 4);
-    //         Hex = (DataRead[0] << 24) + (DataRead[1] << 16) + (DataRead[2] << 8) + DataRead[3];
-    //         NumData = IEEE2Float(Hex);
-    //         printf("float: %f  hex: %x\n",NumData.f, NumData.raw);
-
-    //         AddrRead = AddrRead + 4;
-    //     }
-    //     FlagGet = false;
-        
-    // }
-
     
 }
 
+//Metodo usado para exportar formato XML por la interfaz serial con las posiciones almacendas en la memoria EEPROM
 void FormatPoint(){
-
     uint8_t NS = EEPROM_ReadByte(0x0000);
     uint16_t AddrRead = 0x0004;
     myfloat longitud;
@@ -120,6 +103,7 @@ void FormatPoint(){
     
 }
 
+//Metodo usado para leer de la memoria EEPROM una posiucion de memora especifica y retornar flotante almacenado.
 myfloat ReadEEPROM (uint32_t Addr){
     uint8_t *DataRead;
     myfloat NumData;
